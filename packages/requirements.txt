@@ -1,0 +1,4 @@
+requests
+beautifulsoup4
+# Optional (faster parsing): lxml
+# lxml

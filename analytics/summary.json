@@ -1,0 +1,233 @@
+{
+  "unique_pages": 429,
+  "longest_page": {
+    "url": "https://ics.uci.edu/~fielding/pubs/dissertation/evaluation.htm",
+    "words": 6216
+  },
+  "top_words": [
+    [
+      "dataset",
+      2211
+    ],
+    [
+      "data",
+      1828
+    ],
+    [
+      "information",
+      1381
+    ],
+    [
+      "learning",
+      1249
+    ],
+    [
+      "uci",
+      1204
+    ],
+    [
+      "machine",
+      1092
+    ],
+    [
+      "ics",
+      1035
+    ],
+    [
+      "feature",
+      1013
+    ],
+    [
+      "repository",
+      875
+    ],
+    [
+      "research",
+      853
+    ],
+    [
+      "datasets",
+      798
+    ],
+    [
+      "science",
+      760
+    ],
+    [
+      "features",
+      716
+    ],
+    [
+      "software",
+      666
+    ],
+    [
+      "contact",
+      656
+    ],
+    [
+      "type",
+      603
+    ],
+    [
+      "computer",
+      592
+    ],
+    [
+      "home",
+      579
+    ],
+    [
+      "patient",
+      579
+    ],
+    [
+      "metadata",
+      571
+    ],
+    [
+      "instances",
+      549
+    ],
+    [
+      "donate",
+      514
+    ],
+    [
+      "systems",
+      504
+    ],
+    [
+      "irvine",
+      479
+    ],
+    [
+      "time",
+      468
+    ],
+    [
+      "login",
+      465
+    ],
+    [
+      "view",
+      461
+    ],
+    [
+      "using",
+      457
+    ],
+    [
+      "privacy",
+      449
+    ],
+    [
+      "citation",
+      448
+    ],
+    [
+      "student",
+      439
+    ],
+    [
+      "new",
+      425
+    ],
+    [
+      "classification",
+      425
+    ],
+    [
+      "project",
+      421
+    ],
+    [
+      "design",
+      414
+    ],
+    [
+      "used",
+      404
+    ],
+    [
+      "code",
+      390
+    ],
+    [
+      "link",
+      388
+    ],
+    [
+      "graduate",
+      380
+    ],
+    [
+      "external",
+      379
+    ],
+    [
+      "students",
+      371
+    ],
+    [
+      "based",
+      364
+    ],
+    [
+      "accept",
+      360
+    ],
+    [
+      "engineering",
+      358
+    ],
+    [
+      "system",
+      358
+    ],
+    [
+      "architecture",
+      354
+    ],
+    [
+      "web",
+      352
+    ],
+    [
+      "undergraduate",
+      351
+    ],
+    [
+      "architectural",
+      350
+    ],
+    [
+      "server",
+      348
+    ]
+  ],
+  "subdomains": {
+    "www.stat.uci.edu": 5,
+    "www.informatics.uci.edu": 6,
+    "cs.ics.uci.edu": 1,
+    "ics.uci.edu": 83,
+    "courselisting.ics.uci.edu": 1,
+    "wiki.ics.uci.edu": 47,
+    "hub.ics.uci.edu": 1,
+    "statconsulting.uci.edu": 1,
+    "cml.ics.uci.edu": 2,
+    "chenli.ics.uci.edu": 3,
+    "grape.ics.uci.edu": 2,
+    "archive.ics.uci.edu": 197,
+    "mover.ics.uci.edu": 23,
+    "archive-beta.ics.uci.edu": 11,
+    "summeracademy.ics.uci.edu": 6,
+    "futurehealth.uci.edu": 1,
+    "duttgroup.ics.uci.edu": 36
+  },
+  "duplicates": {
+    "exact": 46,
+    "near": 4,
+    "lowinfo": 10
+  }
+}
