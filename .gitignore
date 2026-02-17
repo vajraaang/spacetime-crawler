@@ -108,3 +108,8 @@ venv.bak/
 
 *.full.py
 *.shelve
+
+# Crawl/runtime artifacts
+frontier.shelve*
+analytics/*
+!analytics/report.txt

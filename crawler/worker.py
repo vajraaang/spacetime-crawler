@@ -23,11 +23,28 @@ class Worker(Thread):
                 self.logger.info("Frontier is empty. Stopping Crawler.")
                 break
             self.frontier.wait_for_politeness(tbd_url)
-            resp = download(tbd_url, self.config, self.logger)
-            self.logger.info(
-                f"Downloaded {tbd_url}, status <{resp.status}>, "
-                f"using cache {self.config.cache_server}.")
-            scraped_urls = scraper.scraper(tbd_url, resp)
-            for scraped_url in scraped_urls:
-                self.frontier.add_url(scraped_url)
-            self.frontier.mark_url_complete(tbd_url)
+            try:
+                resp = download(tbd_url, self.config, self.logger)
+            except Exception:
+                self.logger.exception(f"Download crashed for {tbd_url}; re-queueing")
+                self.frontier.mark_url_failed(tbd_url, requeue=True)
+                continue
+
+            if getattr(resp, "status", 0) == 0:
+                # Transient cache/network error: retry later.
+                self.logger.warning(f"Download failed for {tbd_url}; re-queueing")
+                self.frontier.mark_url_failed(tbd_url, requeue=True)
+                continue
+
+            try:
+                self.logger.info(
+                    f"Downloaded {tbd_url}, status <{resp.status}>, "
+                    f"using cache {self.config.cache_server}.")
+                scraped_urls = scraper.scraper(tbd_url, resp)
+                for scraped_url in scraped_urls:
+                    self.frontier.add_url(scraped_url)
+            except Exception:
+                # Never let a worker thread die; log and move on.
+                self.logger.exception(f"Unhandled worker error while processing {tbd_url}")
+            finally:
+                self.frontier.mark_url_complete(tbd_url)

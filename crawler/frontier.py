@@ -20,6 +20,7 @@ class Frontier(object):
         self._closed = False
         self._domain_next_allowed_at = {}
         self._seen_hashes = set()
+        self._queued_hashes = set()
 
         self.to_be_downloaded = deque()
 
@@ -79,6 +80,7 @@ class Frontier(object):
             self._seen_hashes.add(urlhash)
             if not completed and is_valid(url):
                 self.to_be_downloaded.append(url)
+                self._queued_hashes.add(urlhash)
                 tbd_count += 1
         self.logger.info(
             f"Found {tbd_count} urls to be downloaded from {total_count} "
@@ -98,6 +100,8 @@ class Frontier(object):
                 return None
 
             url = self.to_be_downloaded.pop()
+            urlhash = get_urlhash(normalize(urldefrag(url)[0]))
+            self._queued_hashes.discard(urlhash)
             self._in_progress += 1
             return url
 
@@ -131,10 +135,12 @@ class Frontier(object):
                     (urlhash, url),
                 )
                 self.to_be_downloaded.append(url)
+                self._queued_hashes.add(urlhash)
                 self._cv.notify()
 
     def mark_url_complete(self, url):
         url, _frag = urldefrag(url)
+        url = normalize(url)
         urlhash = get_urlhash(url)
         with self._cv:
             if urlhash not in self._seen_hashes:
@@ -148,6 +154,29 @@ class Frontier(object):
                 )
 
             self._in_progress = max(0, self._in_progress - 1)
+            if self._in_progress == 0 and not self.to_be_downloaded:
+                self._closed = True
+                self._cv.notify_all()
+                return
+
+            self._cv.notify_all()
+
+    def mark_url_failed(self, url, *, requeue=True):
+        """
+        Mark a URL as done for the worker (decrement in-progress) but do not
+        mark it completed in the persistent store. Optionally re-queue it so it
+        can be retried later.
+        """
+        url, _frag = urldefrag(url)
+        url = normalize(url)
+        urlhash = get_urlhash(url)
+        with self._cv:
+            self._in_progress = max(0, self._in_progress - 1)
+
+            if requeue and not self._closed and urlhash not in self._queued_hashes:
+                self.to_be_downloaded.append(url)
+                self._queued_hashes.add(urlhash)
+
             if self._in_progress == 0 and not self.to_be_downloaded:
                 self._closed = True
                 self._cv.notify_all()

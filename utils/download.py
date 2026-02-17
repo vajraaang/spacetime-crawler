@@ -14,32 +14,65 @@ from utils.response import Response
 
 def download(url, config, logger=None):
     host, port = config.cache_server
-    try:
-        if requests is not None:
-            resp = requests.get(
-                f"http://{host}:{port}/",
-                params=[("q", f"{url}"), ("u", f"{config.user_agent}")],
-                timeout=30,
-            )
-            raw = resp.content
-            status_code = resp.status_code
-        else:
-            qs = urllib.parse.urlencode({"q": url, "u": config.user_agent})
-            req_url = f"http://{host}:{port}/?{qs}"
-            try:
-                with urllib.request.urlopen(req_url, timeout=30) as resp:  # nosec B310
-                    raw = resp.read()
-                    status_code = getattr(resp, "status", 200)
-            except HTTPError as e:
-                raw = e.read()
-                status_code = e.code
+    max_attempts = 3
+    backoff_s = 1.0
+    last_err = None
 
-        if raw:
-            return Response(cbor.loads(raw))
-    except (EOFError, ValueError, URLError, TimeoutError) as e:
+    for attempt in range(1, max_attempts + 1):
+        try:
+            if requests is not None:
+                resp = requests.get(
+                    f"http://{host}:{port}/",
+                    params=[("q", f"{url}"), ("u", f"{config.user_agent}")],
+                    timeout=(10, 60),
+                )
+                raw = resp.content
+                status_code = resp.status_code
+            else:
+                qs = urllib.parse.urlencode({"q": url, "u": config.user_agent})
+                req_url = f"http://{host}:{port}/?{qs}"
+                try:
+                    with urllib.request.urlopen(req_url, timeout=60) as resp:  # nosec B310
+                        raw = resp.read()
+                        status_code = getattr(resp, "status", 200)
+                except HTTPError as e:
+                    raw = e.read()
+                    status_code = e.code
+
+            if raw:
+                try:
+                    return Response(cbor.loads(raw))
+                except (EOFError, ValueError) as e:
+                    last_err = e
+                    if logger:
+                        logger.error(f"Failed to decode cache response for {url}: {e!r}")
+            else:
+                last_err = ValueError("Empty response body from cache server")
+                if logger:
+                    logger.error(f"Empty cache response for {url}")
+
+        except (URLError, TimeoutError) as e:
+            last_err = e
+            if logger:
+                logger.warning(
+                    f"Cache request failed (attempt {attempt}/{max_attempts}) for {url}: {e!r}"
+                )
+        except Exception as e:  # requests timeouts, etc.
+            last_err = e
+            if logger:
+                logger.warning(
+                    f"Cache request failed (attempt {attempt}/{max_attempts}) for {url}: {e!r}"
+                )
+
+        if attempt < max_attempts:
+            time.sleep(backoff_s)
+            backoff_s = min(backoff_s * 2, 10.0)
+            continue
+
+        # Exhausted retries.
         if logger:
-            logger.error(f"Spacetime Response error {e!r} with url {url}.")
-        return Response({"error": str(e), "status": 0, "url": url})
+            logger.error(f"Spacetime Response error {last_err!r} with url {url}.")
+        return Response({"error": str(last_err), "status": 0, "url": url})
 
     if logger:
         logger.error(f"Spacetime Response error with url {url}.")
