@@ -1,0 +1,81 @@
+Unique pages (URL defragmented only): 15647
+
+Longest page (by word count):
+https://isg.ics.uci.edu/events/list/?eventDisplay=past, 5693
+
+Top 50 words (stopwords removed):
+support, 20006
+media, 19401
+wiki, 15724
+tools, 15114
+files, 14953
+page, 10209
+labs, 10173
+search, 9863
+ics, 9785
+instructional, 9785
+manager, 9721
+png, 9297
+upload, 8024
+virtual, 7900
+environments, 7774
+security, 7691
+pasted, 7410
+services, 7331
+show, 6963
+revisions, 6936
+software, 6847
+history, 6695
+file, 6675
+group, 6557
+hardware, 6556
+accounts, 6507
+webapps, 6266
+windows, 6197
+linux, 6181
+date, 6018
+kb, 5556
+projects, 5491
+commands, 5436
+name, 5399
+user, 5340
+site, 5271
+view, 5228
+recent, 5209
+old, 5096
+sitemap, 5037
+courses, 5035
+changes, 5031
+log, 5012
+backlinks, 4992
+requesttracker, 4954
+backups, 4921
+root, 4912
+namespaces, 4794
+icsdc, 4779
+choose, 4765
+
+Subdomains in uci.edu: 23
+archive-beta.ics.uci.edu, 11
+archive.ics.uci.edu, 191
+asterix.ics.uci.edu, 5
+cert.ics.uci.edu, 5
+cml.ics.uci.edu, 3
+code.ics.uci.edu, 8
+courselisting.ics.uci.edu, 2
+cs.ics.uci.edu, 1
+flamingo.ics.uci.edu, 1240
+futurehealth.uci.edu, 1
+helpdesk.ics.uci.edu, 2
+hpi.ics.uci.edu, 2
+ics.uci.edu, 146
+intranet.ics.uci.edu, 215
+isg.ics.uci.edu, 149
+mcs.ics.uci.edu, 10
+mover.ics.uci.edu, 23
+sherlock.ics.uci.edu, 7
+shib.service.uci.edu, 1
+support.ics.uci.edu, 3
+wiki.ics.uci.edu, 13615
+www.informatics.uci.edu, 2
+www.stat.uci.edu, 2
